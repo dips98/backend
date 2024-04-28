@@ -12,30 +12,42 @@ mongoose.connect('mongodb+srv://dipesh:Next%40123@cluster0.flcyeme.mongodb.net/e
   .then(() => console.log('DB Connected!'));
   
 
-  const blogSchema = new Schema({
-    title: String, // String is shorthand for {type: String}
-    author: String,
-    body: String,
-    comments: [{ body: String, date: Date }],
-    date: { type: Date, default: Date.now },
-    hidden: Boolean,
-    meta: {
-      votes: Number,
-      favs: Number
-    }
+  const userSchema = new Schema({
+    firstname: String,
+    lastname: String,
+    username: String,
+    email:String
   });
+
+const User = mongoose.model('User', userSchema);
 
 app.get('/', function (req, res) {
   res.send('Home page')
 })
 
-app.post('/login', jsonParser,(req, res)=> {
+app.post('/register', jsonParser,(req, res)=> {
+
   console.log("Body data", req.body);
-  res.send('login API')
+
+  const { firstname, lastname, username, email } = req.body;
+  const createNewUser = new User({
+    firstname: firstname,
+    lastname: lastname,
+    username: username,
+    email: email
+  })
+
+  createNewUser.save().then((result)=>{
+    res.status(201).json({msg:'New Created successfully!', result:result})
+  })
+
+  // res.send('Register API')
+
+
 })
 
-app.post('/register', (req, res)=> {
-  res.send('Register API')
+app.post('/login', (req, res)=> {
+  res.send('Login API')
 })
 
 app.get('/about', function (req, res) {
