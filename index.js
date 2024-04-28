@@ -5,6 +5,26 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 // app.use(bodyParser.json());
 
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+mongoose.connect('mongodb+srv://dipesh:Next%40123@cluster0.flcyeme.mongodb.net/ecom')
+  .then(() => console.log('DB Connected!'));
+  
+
+  const blogSchema = new Schema({
+    title: String, // String is shorthand for {type: String}
+    author: String,
+    body: String,
+    comments: [{ body: String, date: Date }],
+    date: { type: Date, default: Date.now },
+    hidden: Boolean,
+    meta: {
+      votes: Number,
+      favs: Number
+    }
+  });
+
 app.get('/', function (req, res) {
   res.send('Home page')
 })
