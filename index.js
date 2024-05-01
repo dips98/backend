@@ -16,7 +16,7 @@ const { Schema } = mongoose;
 mongoose.connect('mongodb+srv://dipesh:Next%40123@cluster0.flcyeme.mongodb.net/ecom')
   .then(() => console.log('DB Connected!'))
   .catch((e) => {
-    console.log("Data base not connected! :", e);
+    console.log("Data base not connected! :");
   })
 
 
@@ -58,8 +58,22 @@ app.post('/register', jsonParser, (req, res) => {
 
 })
 
-app.post('/login', (req, res) => {
-  res.send('Login API')
+app.post('/login', jsonParser, (req, res) => {
+
+  const {email, password} = req.body;
+
+  User.findOne({ email: email }).then((result) => {
+    if (result) {
+      if (result.password == password) {
+        res.status(200).send({ msg: 'loginSuccess' });
+      }else{
+        res.status(401).send({ msg: 'Incorrect Password' });
+      }
+    } else {
+      res.status(404).send({ msg: 'User does not exist.' });
+    }
+  })
+  console.log(req.body);
 })
 
 app.get('/about', function (req, res) {
