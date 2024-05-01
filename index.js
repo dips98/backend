@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
+var jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(cors())
 const port = 3000;
-
+const privateKey = 'drf';
 const jsonParser = bodyParser.json();
 // app.use(bodyParser.json());
 
@@ -58,6 +58,11 @@ app.post('/register', jsonParser, (req, res) => {
 
 })
 
+function generate_JWT_Token(payload) {
+  var token = jwt.sign(payload, privateKey);
+  return token;
+}
+
 app.post('/login', jsonParser, (req, res) => {
 
   const {email, password} = req.body;
@@ -65,7 +70,8 @@ app.post('/login', jsonParser, (req, res) => {
   User.findOne({ email: email }).then((result) => {
     if (result) {
       if (result.password == password) {
-        res.status(200).send({ msg: 'loginSuccess' });
+        const token = generate_JWT_Token(req.body);
+        res.status(200).send({ msg: 'loginSuccess', token:token });
       }else{
         res.status(401).send({ msg: 'Incorrect Password' });
       }
