@@ -1,5 +1,5 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -10,14 +10,14 @@ const { Schema } = mongoose;
 
 mongoose.connect('mongodb+srv://dipesh:Next%40123@cluster0.flcyeme.mongodb.net/ecom')
   .then(() => console.log('DB Connected!'));
-  
 
-  const userSchema = new Schema({
-    firstname: String,
-    lastname: String,
-    username: String,
-    email:String
-  });
+
+const userSchema = new Schema({
+  firstname: String,
+  lastname: String,
+  username: String,
+  email: String
+});
 
 const User = mongoose.model('User', userSchema);
 
@@ -25,7 +25,7 @@ app.get('/', function (req, res) {
   res.send('Home page')
 })
 
-app.post('/register', jsonParser,(req, res)=> {
+app.post('/register', jsonParser, (req, res) => {
 
   console.log("Body data", req.body);
 
@@ -37,8 +37,8 @@ app.post('/register', jsonParser,(req, res)=> {
     email: email
   })
 
-  createNewUser.save().then((result)=>{
-    res.status(201).json({msg:'New Created successfully!', result:result})
+  createNewUser.save().then((result) => {
+    res.status(201).json({ msg: 'New Created successfully!', result: result });
   })
 
   // res.send('Register API')
@@ -46,7 +46,7 @@ app.post('/register', jsonParser,(req, res)=> {
 
 })
 
-app.post('/login', (req, res)=> {
+app.post('/login', (req, res) => {
   res.send('Login API')
 })
 
@@ -66,6 +66,6 @@ app.get('/', function (req, res) {
   res.send('Hello World')
 })
 
-app.listen(port, ()=>{
-  console.log("Server running on port :",port)
+app.listen(port, () => {
+  console.log("Server running on port :", port)
 })
