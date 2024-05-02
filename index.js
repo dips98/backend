@@ -31,7 +31,15 @@ const userSchema = new Schema({
   contact: String,
 });
 
+const productSchema = new Schema({
+  productId: String,
+  productName: String,
+  productRate: Number,
+  productQuantity: Number,
+});
+
 const User = mongoose.model('User', userSchema);
+const Product = mongoose.model('Product', productSchema);
 
 app.get('/', function (req, res) {
   res.send('Home page')
@@ -80,6 +88,21 @@ app.post('/login', jsonParser, (req, res) => {
     }
   })
   console.log(req.body);
+})
+
+app.post('/addProduct',jsonParser, (req, res)=>{
+  const {productId, productName, productQuantity, productRate} = req.body;
+  console.log(req.body);
+  const addProduct = new Product({
+    productId: productId,
+    productName: productName,
+    productQuantity: productQuantity,
+    productRate: productRate,
+  })
+  addProduct.save().then((result) => {
+    res.status(201).send({ msg: 'Product Added successfully!', result:result});
+  })
+  
 })
 
 app.get('/about', function (req, res) {
